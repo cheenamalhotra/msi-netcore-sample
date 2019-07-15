@@ -1,4 +1,4 @@
-# Sample Console App to test MSI Authentication with .Net Core App
+# Sample Console App to test MSI Authentication with .Net Core 2.1+
 
 This sample application can be used to test MSI Authentication from an **"Identity"** enabled Azure Resource. The application code acquires Access Token by making `HttpWebRequest` call to target Azure Services, and then creates `SqlConnection` instance with the access token acquired.
 
