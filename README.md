@@ -2,6 +2,8 @@
 
 This sample application can be used to test MSI Authentication from an **"Identity"** enabled Azure Resource. The application code acquires Access Token by making `HttpWebRequest` call to target Azure Services, and then creates `SqlConnection` instance with the access token acquired.
 
+Alternatively, for testing MSI Authentication based connectivity with **Azure App Service** using ASP.NET Web App, please refer to sample app here: [cheenamalhotra/msi-netcore-web-sample](https://github.com/cheenamalhotra/msi-netcore-web-sample)
+
 ### Packages Referenced:
 - Microsoft.Data.SqlClient 1.0.19189.1-Preview
 - Newtonsoft.Json 12.0.2

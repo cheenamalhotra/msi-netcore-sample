@@ -73,9 +73,16 @@ namespace TestMSIAuthentication
                 // Pipe response Stream to a StreamReader, and extract access token
                 StreamReader streamResponse = new StreamReader(response.GetResponseStream());
                 string stringResponse = streamResponse.ReadToEnd();
-
-                MSIAccessToken tokenObject = JsonConvert.DeserializeObject<MSIAccessToken>(stringResponse);
-                return tokenObject.access_token;
+                if (IsAzureApp)
+                {
+                    MSIAccessTokenApp tokenObject = JsonConvert.DeserializeObject<MSIAccessTokenApp>(stringResponse);
+                    return tokenObject.access_token;
+                }
+                else
+                {
+                    MSIAccessToken tokenObject = JsonConvert.DeserializeObject<MSIAccessToken>(stringResponse);
+                    return tokenObject.access_token;
+                }
             }
             catch (Exception e)
             {
@@ -93,6 +100,13 @@ namespace TestMSIAuthentication
         public long expires_on { get; set; }
         public long ext_expires_in { get; set; }
         public long not_before { get; set; }
+        public string resource { get; set; }
+        public string token_type { get; set; }
+    }
+    class MSIAccessTokenApp
+    {
+        public string access_token { get; set; }
+        public DateTimeOffset expires_on { get; set; }
         public string resource { get; set; }
         public string token_type { get; set; }
     }
