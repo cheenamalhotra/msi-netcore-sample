@@ -4,7 +4,6 @@ This sample application can be used to test MSI Authentication from an **"Identi
 
 ### Packages Referenced:
 - Microsoft.Data.SqlClient 1.0.19189.1-Preview
-- Microsoft.Identity.Client 4.1.0
 - Newtonsoft.Json 12.0.2
 
 
