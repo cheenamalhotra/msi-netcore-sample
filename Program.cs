@@ -37,13 +37,36 @@ namespace TestMSIAuthentication
     {
         public string GetMSIAuthToken()
         {
-            // Build request to acquire managed identities for Azure resources token
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://database.windows.net/");
-            request.Headers["Metadata"] = "true";
-            request.Method = "GET";
+            string MSIEndpoint = Environment.GetEnvironmentVariable("MSI_ENDPOINT");
+            string MSISecret = Environment.GetEnvironmentVariable("MSI_SECRET");
+            string URL = "";
+            string resource = "https://database.windows.net/";
+
+            /*
+            * IsAzureApp is used for identifying if the current client application is running in a Virtual Machine
+            * (without MSI environment variables) or App Service/Function (with MSI environment variables) as the APIs to
+            * be called for acquiring MSI Token are different for both cases.
+            */
+            bool IsAzureApp = null != MSIEndpoint && !"".Equals(MSIEndpoint) && null != MSISecret && !"".Equals(MSISecret);
+
+            if(IsAzureApp){
+                URL = MSIEndpoint + "?api-version=2017-09-01&resource=" + resource;
+            } else 
+            {
+                URL = "http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=" + resource;
+            }
 
             try
             {
+                
+                // Build request to acquire managed identities for Azure resources token
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(URL);
+                request.Method = "GET";
+                if (IsAzureApp) {
+                    request.Headers["Secret"] = MSISecret;
+                } else {
+                    request.Headers["Metadata"] = "true";
+                }
                 // Call /token endpoint
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
